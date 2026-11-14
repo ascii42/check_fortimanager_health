@@ -31,12 +31,13 @@
 # 1.7.1  2026-11-04  -eDNS: configured DNS servers via API (requires full-admin);
 #                    -eNTP verbose: ntpv3/auth/poll-interval per server;
 #                    fix enable-all guard missing enable_up/enable_res/enable_dns
+# 1.7.2  2026-11-14  Add --https-verify/--https-ca-bundle (CURL_OPTS, like check_fortianalyzer_health.sh)
 #
 
 ## VARIABLES
 PROGNAME="${0##*/}"
 PROGPATH="${0%/*}"
-REVISION="1.7.1"
+REVISION="1.7.2"
 JQ="$(which jq)"
 CURL="$(which curl)"
 AWK="$(which awk)"
@@ -114,6 +115,11 @@ Options:
     Password for login (use with -U)
  --https-port <port>
     HTTPS/API port (default: 443)
+ --https-verify
+    Require validation of the HTTPS server certificate
+ --https-ca-bundle <file>
+    CA bundle file to validate device API server certificate instead of system
+    default. Implies --https-verify.
 
  SNMP options (supplement API access for -eRes and -eUp):
  -SC, --snmp-community <community>
@@ -261,8 +267,9 @@ while [[ -n "${1}" ]]; do
 		shift ; api_user="${1}" ;;
 	-P|--password)
 		shift ; api_pass="${1}" ;;
-	--https-port)
-		shift ; https_port="${1}" ;;
+	--https-port)      shift ; https_port="${1}" ;;
+	--https-verify)        https_verify=1 ;;
+	--https-ca-bundle) shift ; https_ca_bundle="${1}" ;;
 	# SNMP credentials
 	-SC|--snmp-community)  shift ; snmp_community="${1}" ;;
 	-u|--snmp-user)        shift ; snmp_user="${1}" ;;
@@ -398,6 +405,10 @@ fi
 ]] && enable_all=1
 
 # Curl options
+if [[ -n "${https_ca_bundle}" ]]; then
+	export CURL_CA_BUNDLE="${https_ca_bundle}"
+	https_verify=1
+fi
 CURL_OPTS="--max-time 15"
 [[ -z "${https_verify}" ]] && CURL_OPTS="--insecure ${CURL_OPTS}"
 if [[ -n "${debug}" ]]; then
