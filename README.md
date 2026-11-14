@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Shell Script](https://img.shields.io/badge/Shell-Bash-green.svg)](https://www.gnu.org/software/bash/)
 [![Monitoring](https://img.shields.io/badge/Monitoring-Icinga%2FNagios-blue.svg)](https://icinga.com/)
-[![Version](https://img.shields.io/badge/version-1.7.1-orange.svg)](check_fortimanager_health.sh)
+[![Version](https://img.shields.io/badge/version-1.7.2-orange.svg)](check_fortimanager_health.sh)
 
 A comprehensive Bash-based monitoring plugin for Fortinet FortiManager, compatible with Icinga and Nagios monitoring systems. This plugin monitors system health, managed devices, ADOMs, firmware update availability, background tasks, FortiGuard connectivity, NTP, DNS, syslog configuration, and system resources — via the FortiManager JSON-RPC API and/or SNMP.
 
